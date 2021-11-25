@@ -8,7 +8,7 @@ const { Worker } = require('worker_threads');
 let count = 0;
 app.get('/',(req,res)=>{
     count += 1;
-    res.status(200).json({countter : count});
+    res.status(200).json({counter : count});
 });
 
 app.get('/heavy',(req,res)=>{
