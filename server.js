@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
-const { Worker } = require('worker_threads');
+const { Worker, isMainThread } = require('worker_threads');
 
 /* const temp = require('./temp'); */
 
@@ -12,7 +12,6 @@ app.get('/',(req,res)=>{
 });
 
 app.get('/heavy',(req,res)=>{
-
     const worker = new Worker('./worker');
     worker.on('message',(data)=>{
         res.status(200).json({total : data});

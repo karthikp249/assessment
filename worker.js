@@ -5,4 +5,4 @@ let total = 0;
         total++;
     }
 
-    parentPort.postMessage(total);
+parentPort.postMessage(total);
