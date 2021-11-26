@@ -2,11 +2,11 @@ var mongoose = require('mongoose');
 
 var agentSchema = new mongoose.Schema(
     {
-        agent: { type: String, unique: true, required: true },
-        user: {
+        agent: { type: String, required: true },
+        /* user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
-        }
+        } */
     },
     {
         collection: 'agent',
@@ -14,7 +14,7 @@ var agentSchema = new mongoose.Schema(
     },
 );
 
-agentSchema.index({ agent: 1 });
+/* agentSchema.index({ agent: 1 }); */
 
 const Agent = mongoose.model('agent', agentSchema);
 

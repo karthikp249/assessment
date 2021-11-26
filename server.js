@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 const { Worker, isMainThread, workerData } = require('worker_threads');
-
+const mongoose = require('mongoose');
 const multer = require('multer');
 
 const storage = multer.diskStorage({
@@ -16,6 +16,15 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
+var uri = "mongodb://localhost:27017/test";
+
+mongoose.connect(uri, { useUnifiedTopology: true, useNewUrlParser: true });
+
+const connection = mongoose.connection;
+
+connection.once("open", function() {
+  console.log("MongoDB database connection established successfully");
+});
 
 let count = 0;
 app.get('/', (req, res) => {
@@ -24,7 +33,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/upload', upload.single('datasheet'), (req, res) => {
-    const worker = new Worker('./worker_old', { workerData: { text: 'hello' } });
+    const worker = new Worker('./worker_old.js', { workerData: { text: 'hello' } });
     worker.on('message', (data) => {
         res.status(200).send(data)
     });
