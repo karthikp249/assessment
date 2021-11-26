@@ -3,8 +3,6 @@ const app = express();
 const port = process.env.PORT || 3000;
 const { Worker, isMainThread } = require('worker_threads');
 
-/* const temp = require('./temp'); */
-
 let count = 0;
 app.get('/',(req,res)=>{
     count += 1;
