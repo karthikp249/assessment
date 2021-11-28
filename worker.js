@@ -1,108 +1,129 @@
-const { parentPort, workerData } = require("worker_threads");
-const fs = require("fs");
-const path = require("path");
-const csv = require("fast-csv");
+const { parentPort, workerData } = require('worker_threads');
+const fs = require('fs');
+const path = require('path');
+const csv = require('fast-csv');
 
-const mongoose = require("mongoose");
-const Agent = require("./models/Agent");
-const User = require("./models/User");
+const mongoose = require('mongoose');
+const Agent = require('./models/Agent');
+const User = require('./models/User');
+const usersAccount = require('./models/usersAccount');
+const policyCarrier = require('./models/policyCarrier');
+const policyCategory = require('./models/policyCategory');
+const policyInfo = require('./models/policyInfo');
 
-const inputFilePath = path.resolve(__dirname, "resources", "datasheet.csv");
 
-/* async function readCsv(inputFilePath) {
-    return new Promise((resolve, reject) => {
-        var agent = [];
+const inputFilePath = path.resolve(__dirname, 'resources', 'datasheet.csv');
 
-        try {
-            csv
-                .parse(inputFilePath, {
-                    headers: true
-                })
-                .on("data", function (data) {
-                    data['_id'] = new mongoose.Types.ObjectId();
-
-                    agent.push(data);
-                })
-                .on("end", function () {
-                    Agent.create(agent, function (err, documents) {
-                        if (err) reject(err);
-                    });
-                    resolve(agent.length + ' agents have been successfully uploaded.');
-                });
-        } catch (error) {
-            reject(error);
-        }
-    });
-} */
-
-const uri = "mongodb://localhost/test";
+const uri = 'mongodb://localhost/test';
 mongoose.Promise = global.Promise;
 
 async function readCsv(inputFilePath) {
-    const conn = await mongoose.connect(uri);
-    await Promise.all(
-      Object.entries(conn.models).map(([k, m]) => m.deleteOne())
-    );
-    let headers = Object.keys(Agent.schema.paths).filter(
-      (k) => ["_id", "__v"].indexOf(k) === -1
-    );
+  const conn = await mongoose.connect(uri);
+  await Promise.all(
+    Object.entries(conn.models).map(([k, m]) => m.deleteMany())
+  );
 
   return new Promise((resolve, reject) => {
-    let data = [];
+    try {
+      /* let data = []; */
 
-    csv
-      .parseFile(inputFilePath)
-      .on("error", reject)
-      .on("data", (row) => {
-        const agent = new Agent({
-          agent: row[0],
-        });
-
-        agent.save(function (err) {
-          if (err) return err;
-          const user = new User({
-            fisrtname: row[1],
-            dob: row[2],
-            address: row[3],
-            phone: row[4],
-            state: row[5],
-            zip: row[6],
-            email: row[7],
-            userType: row[8],
-            agent: agent._id,
+      csv
+        .parseFile(inputFilePath, { headers: true })
+        .on('error', reject)
+        .on('data', async (row) => {
+          const agent = new Agent({
+            agent: row['agent'],
           });
-        });
 
-        data.push(row)
-                /* const obj = {agent : row['agent']}; */
-                /* if (obj) data.push(obj); */
-      })
-      .on("end", async () => {
-          
-    
-        Agent.insertMany(data)
-          .then(async (value) => {
-            await User.insertMany(data)
-              .then((userValue) => {
-                resolve(data);
-              })
-              .catch((error) => {
-                console.log(error);
+          agent.save(async function (err) {
+            if (err)
+              reject({ status: 502, message: 'Invalid response, Error' });
+            const user = new User({
+              firstName: row['firstname'],
+              dob: row['dob'],
+              address: row['address'],
+              phone: row['phone'],
+              state: row['state'],
+              gender: row['gender'],
+              zip: row['zip'],
+              email: row['email'],
+              userType: row['userType'],
+              agent: agent._id,
+            });
+            await user.save(async function (err) {
+              if (err)
+                reject({ status: 502, message: 'Invalid response, Error' });
+              const users_account = new usersAccount({
+                accountName: row['account_name'],
+                primary: row['primary'],
+                applicantId: row['ApplicantID'],
+                agencyId: row['agency_id'],
+                hasActiveClientPolicy: row['hasActive ClientPolicy'],
+                csr: row['csr'],
+                producer: row['producer'],
+                user: user._id,
               });
-          })
-          .catch((error) => {
-            console.log(error);
+
+              await users_account.save(async (err) => {
+                if (err)
+                  reject({ status: 502, message: 'Invalid response, Error' });
+                const policy_category = new policyCategory({
+                  categoryName: row['category_name'],
+                });
+
+                await policy_category.save(async (err) => {
+                  if (err)
+                    reject({ status: 502, message: 'Invalid response, Error' });
+                  const policy_carrier = new policyCarrier({
+                    companyName: row['company_name'],
+                  });
+                  await policy_carrier.save(async (err) => {
+                    if (err)
+                      reject({
+                        status: 502,
+                        message: 'Invalid response, Error',
+                      });
+                    const policy_info = new policyInfo({
+                      policyNumber: row['policy_number'],
+                      policyStartDate: row['policy_start_date'],
+                      policyEndDate: row['policy_end_date'],
+                      policyMode: row['policy_mode'],
+                      premiumAmountWritten: row['premium_amount_written'],
+                      premiumAmount: row['premium_amount'],
+                      policyType: row['policy_type'],
+                      policyCategory: policy_category._id,
+                      userId: user._id,
+                      companyCollectionId: policy_carrier._id,
+                    });
+
+                    await policy_info.save(async (err) => {
+                      if (err) {
+                        reject({
+                          status: 502,
+                          message: 'Invalid response, Error',
+                        });
+                      }
+                    });
+                  });
+                });
+              });
+            });
           });
-        /* resolve(data); */
-      });
+        })
+        .on('end', async () => {
+          resolve({ status: 200, message: 'File upladed successfully' });
+        });
+    } catch (e) {
+      console.error(e);
+      reject({ status: 502, message: 'Invalid response, Error' });
+    }
   });
 }
 
 readCsv(inputFilePath)
   .then((data) => {
-    console.log(data);
-    parentPort.postMessage({ data: data });
+    parentPort.postMessage(data);
   })
   .catch((err) => {
-    console.log(err);
+    parentPort.postMessage(err);
   });

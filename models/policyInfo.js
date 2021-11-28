@@ -5,6 +5,10 @@ var policyInfoSchema = new mongoose.Schema(
     policyNumber: { type: String, required: true },
     policyStartDate: { type: Date, required: true },
     policyEndDate: { type: Date, required: true },
+    policyMode: { type: Number, required: true },
+    premiumAmountWritten: { type: Number, required: false },
+    premiumAmount: { type: Number, required: true },
+    policyType: { type: String, required: true },
     policyCategory: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "policyCategory",
