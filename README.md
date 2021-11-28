@@ -10,11 +10,11 @@ This is an example of how you may give instructions on setting up your project l
 
 1. Clone the repo
 
-    git clone https://github.com/karthikp249/assessment.git
+        git clone https://github.com/karthikp249/assessment.git
 
 2. Install NPM packages
 
-    npm install
+        npm install
 
 ## API Documentaion :
 
@@ -28,14 +28,12 @@ This is an example of how you may give instructions on setting up your project l
 - key
 **datasheet**  						 C:/..../Downloads/data-sheet.csv
 
-
 ------------
 
 **GET**			policy by username
 
 - url
 `http://localhost:3000/api/policyInfo?username=<username>`
-
 
 ------------
 
