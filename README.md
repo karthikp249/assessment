@@ -4,7 +4,7 @@ This is an example of how you may give instructions on setting up your project l
 
 ## Prerequisites
 
-- nodejs >= 12
+- nodejs  "^12"
 
 ## Installation
 
