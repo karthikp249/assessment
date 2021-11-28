@@ -1,4 +1,4 @@
-const { parentPort, workerData } = require('worker_threads');
+const { parentPort,isMainThread, workerData } = require('worker_threads');
 const fs = require('fs');
 const path = require('path');
 const csv = require('fast-csv');
@@ -11,10 +11,11 @@ const policyCarrier = require('./models/policyCarrier');
 const policyCategory = require('./models/policyCategory');
 const policyInfo = require('./models/policyInfo');
 
+//console.log(isMainThread)
 
 const inputFilePath = path.resolve(__dirname, 'resources', 'datasheet.csv');
 
-const uri = 'mongodb://localhost/test';
+const uri = 'mongodb://localhost/assessmentKarthik';
 mongoose.Promise = global.Promise;
 
 async function readCsv(inputFilePath) {
