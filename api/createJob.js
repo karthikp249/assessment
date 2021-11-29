@@ -8,12 +8,11 @@ const schedule = require("node-schedule");
 
 module.exports = async (req, res) => {
   try {
-    let timestamp = req.body.timestamp
-        ? moment(req.body.timestamp, timestampFormat)
-        : res.status(400).send("Please enter Timestamp"),
-      message = req.body.message
-        ? req.body.message
-        : res.status(400).send("Please enter Message");
+    let timestamp = req.body.timestamp ? moment(req.body.timestamp, timestampFormat) : -1,
+      message = req.body.message ? req.body.message : -1;
+
+    if (timestamp == -1) return res.status(400).send("Please enter Timestamp");
+    if (message == -1) return res.status(400).send("Please enter Message");
 
     const collection1 = new Collection1({
       timestamp: timestamp,
@@ -49,7 +48,7 @@ module.exports = async (req, res) => {
         .status(200)
         .send(
           "job scheduled at timestamp: " +
-            moment(timestamp).format(timestampFormat)
+          moment(timestamp).format(timestampFormat)
         );
     });
   } catch (e) {

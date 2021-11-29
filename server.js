@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 var start = usage();
 setInterval(() => {
   fs.readFile(__filename, "utf8", function (err, data) {
-    if (usage(start).percent.toFixed(2) > 70) {
+    if (usage(start).percent.toFixed(2) > 150) {
       fs.writeFileSync(
         "./restart.json",
         JSON.stringify({
@@ -71,7 +71,9 @@ app.post("/upload", upload.single("datasheet"), (req, res) => {
 });
 
 app.get("/api/policyInfo/", routerPolicyInfo);
-app.get("/api/policyAggregate/", routerPolicyAggregate);
+
+app.get("/api/userAggPolicyByUsername/", routerPolicyAggregate.getDataByUsername);
+app.get("/api/userAggPolicyAll/", routerPolicyAggregate.getEachUserData);
 
 app.post("/api/createJob/", routerCreateJob);
 
