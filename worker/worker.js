@@ -4,19 +4,18 @@ const path = require('path');
 const csv = require('fast-csv');
 
 const mongoose = require('mongoose');
-const Agent = require('./models/Agent');
-const User = require('./models/User');
-const usersAccount = require('./models/usersAccount');
-const policyCarrier = require('./models/policyCarrier');
-const policyCategory = require('./models/policyCategory');
-const policyInfo = require('./models/policyInfo');
+const Agent = require('../models/Agent');
+const User = require('../models/User');
+const usersAccount = require('../models/usersAccount');
+const policyCarrier = require('../models/policyCarrier');
+const policyCategory = require('../models/policyCategory');
+const policyInfo = require('../models/policyInfo');
 
 //console.log(isMainThread)
 
-const inputFilePath = path.resolve(__dirname, 'resources', 'datasheet.csv');
+const inputFilePath = path.resolve(__dirname, '../', 'resources', 'datasheet.csv');
 
 const uri = 'mongodb://localhost/assessmentKarthik';
-mongoose.Promise = global.Promise;
 
 async function readCsv(inputFilePath) {
   const conn = await mongoose.connect(uri);

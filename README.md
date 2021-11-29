@@ -4,7 +4,7 @@ This is an example of how you may give instructions on setting up your project l
 
 ## Prerequisites
 
-- nodejs >= 12
+- nodejs >= 14
 
 ## Installation
 
@@ -15,6 +15,7 @@ This is an example of how you may give instructions on setting up your project l
 2. Install NPM packages
 
         npm install
+        npm install -g nodemon
 
 3. Run server
 

@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 var start = usage();
 setInterval(() => {
   fs.readFile(__filename, "utf8", function (err, data) {
-    if (usage(start).percent.toFixed(2) > 150) {
+    if (usage(start).percent.toFixed(2) > 70) {
       fs.writeFileSync(
         "./restart.json",
         JSON.stringify({
@@ -64,25 +64,20 @@ app.get("/", (req, res) => {
 });
 
 app.post("/upload", upload.single("datasheet"), (req, res) => {
-  const worker = new Worker("./worker.js", { workerData: { text: "hello" } });
+  const worker = new Worker("./worker/worker.js");
   worker.on("message", (data) => {
     res.status(data.status).send(data.message);
   });
 });
 
+//Task1
 app.get("/api/policyInfo/", routerPolicyInfo);
-
 app.get("/api/userAggPolicyByUsername/", routerPolicyAggregate.getDataByUsername);
 app.get("/api/userAggPolicyAll/", routerPolicyAggregate.getEachUserData);
 
+//Task 2
 app.post("/api/createJob/", routerCreateJob);
 
-app.get("/heavy", (req, res) => {
-  const worker = new Worker("./worker2.js");
-  worker.on("message", (data) => {
-    res.status(200).json({ total: data });
-  });
-});
 
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
