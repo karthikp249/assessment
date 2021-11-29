@@ -4,10 +4,12 @@ const policyInfo = require("../models/policyInfo");
 const filter = { firstName: "Lura Lucca" };
 
 async function getdata(){
-    const result = User.aggregate([{ $match: filter }]);
+    /* const result = User.aggregate([{ $match: filter }]);
     for await (const doc of result) {
       console.log(doc.agent);
-    }
+    } */
+
+    const result = 2;
 }
 getdata()
 

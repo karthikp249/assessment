@@ -37,11 +37,6 @@ async function fileRead(inputFilePath) {
 
         await Promise.all(Object.entries(conn.models).map(([k, m]) => m.deleteMany()));
 
-        /* let headers = Object.keys(Agent.schema.paths)
-            .filter(k => ['_id', '__v'].indexOf(k) === -1); */
-
-
-
     await new Promise((resolve, reject) => {
       let buffer = [],
         counter = 0;
@@ -55,11 +50,9 @@ async function fileRead(inputFilePath) {
           buffer.push(doc);
           
           counter++;
-          /* console.log(counter); */
-          //log(doc);
+
           try {
             if (counter > 10000) {
-              /* The insert operation should be included here if the record set exceeds 10000*/
               buffer = [];
               counter = 0;
             }
