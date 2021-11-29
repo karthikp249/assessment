@@ -36,14 +36,29 @@ This is an example of how you may give instructions on setting up your project l
 
 ------------
 
-**GET**			policy by username
+2) **GET**			policy by username
 
 - url
 `http://localhost:3000/api/policyInfo?userName=<username>`
 
 ------------
+3) **GET**			getAggDataByUsername
 
-**POST**			create Job schedule
+- url
+`http://localhost:3000/api/userPolicyByUsername?userName=<username>`
+
+------------
+
+**GET**			getAggPolicyAll
+
+- url
+`http://localhost:3000/api/userAggPolicyAll`
+
+------------
+
+## Task 2
+
+1) **POST**			create Job schedule
 
 - url
 `http://localhost:3000/api/createJob`
@@ -60,19 +75,5 @@ This is an example of how you may give instructions on setting up your project l
     }
 
 ###### Note: Format for timestamps should be YYYY-MM-DD HH:mm:ss
-
-------------
-
-**GET**			getAggDataByUsername
-
-- url
-`http://localhost:3000/api/userPolicyByUsername?userName=<username>`
-
-------------
-
-**GET**			getAggPolicyAll
-
-- url
-`http://localhost:3000/api/userAggPolicyAll`
 
 ------------
