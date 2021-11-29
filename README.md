@@ -57,4 +57,4 @@ This is an example of how you may give instructions on setting up your project l
       "message": "Message from collection1"
     }
 
-#### Note: timestamp format should be YYYY-MM-DD HH:mm:ss
+###### Note: timestamp format should be YYYY-MM-DD HH:mm:ss
