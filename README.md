@@ -30,7 +30,7 @@ This is an example of how you may give instructions on setting up your project l
 **Body** form-data
 
 - key
-**datasheet**  						 C:/..../Downloads/data-sheet.csv
+**datasheet**  :						 C:/..../Downloads/data-sheet.csv
 
 ------------
 
