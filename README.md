@@ -24,7 +24,7 @@ This is an example of how you may give instructions on setting up your project l
 
 ## Task 1)
 
-## 1) **POST**       CSV upload
+1) **POST**       CSV upload
 
 - url
 `http://localhost:3000/upload`
