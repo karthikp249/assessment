@@ -6,6 +6,8 @@ const port = process.env.PORT || 3000;
 const { Worker, isMainThread, workerData } = require("worker_threads");
 const mongoose = require("mongoose");
 const multer = require("multer");
+
+const usage = require("cpu-percentage");
 const fs = require("fs");
 
 const routerPolicyInfo = require("./api/policyInfo");
@@ -21,7 +23,6 @@ app.use(bodyParser.json());
  * Node server CPU utilization in real-time,
  * restarts on 70 percent CPU usage
  */
-const usage = require("cpu-percentage");
 var start = usage();
 setInterval(() => {
   fs.readFile(__filename, "utf8", function (err, data) {
