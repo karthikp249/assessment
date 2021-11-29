@@ -1,23 +1,6 @@
 const User = require("../models/User");
 const policyInfo = require("../models/policyInfo");
 
-async function getdata() {
-
-  const result = User.aggregate([{ $match: { firstName: "Lura Lucca" } }, {
-    $lookup: {
-      from: "policyInfo",
-      localField: "_id",
-      foreignField: "userId",
-      as: "policy"
-    }
-  }]);
-
-  for await (const doc of result) {
-    console.log(doc);
-  }
-}
-/* getdata() */
-
 exports.getDataByUsername = async (req, res) => {
   try {
     let userName = (req.query.userName) ? req.query.userName : -1;
